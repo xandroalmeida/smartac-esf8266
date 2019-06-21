@@ -1,1 +1,0 @@
-# smartac-esf8256
