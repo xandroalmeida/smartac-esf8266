@@ -1,21 +1,21 @@
 #include "clock.h"
+#include "ui.h"
 #include <WiFiUdp.h>
 #include <NTPClient.h>
-#include <TimeLib.h>
 
 static WiFiUDP ntpUDP;
-static NTPClient timeClient(ntpUDP, -60*60*3);
+static NTPClient timeClient(ntpUDP, "a.ntp.br",  -60*60*3);
 
-static time_t getNtpTime() {
-  timeClient.update();
-  return timeClient.getEpochTime();
-}
 
 void clock_init() 
 {
     timeClient.begin();
-    setSyncProvider(getNtpTime);
-    setSyncInterval(300);
+    ui_data.ntp_status = disconnected;
+    clock_loop();
+}
+
+void clock_loop() {
+  ui_data.ntp_status = timeClient.update() ? connected : disconnected;
 }
 
 String clock_getFormattedTime() {

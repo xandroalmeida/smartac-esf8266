@@ -1,7 +1,7 @@
 #ifndef __UI_H__
 #define __UI_H__
 
-enum _status {on, off, not_configured, disconnected, connected};
+enum _status {on, off, not_configured, disconnected, connected, error};
 
 struct st_ui_data {
     _status wifi_status;
@@ -9,9 +9,9 @@ struct st_ui_data {
     _status ntp_status;
 };
 
-static st_ui_data ui_data = {not_configured};
+extern st_ui_data ui_data;
 
 void ui_init();
-void ui_loop();
+void ui_update(bool force_update = false);
 
 #endif

@@ -7,12 +7,11 @@
 
 void setup() {
   pinMode(D3, OUTPUT);
-  digitalWrite(D3, HIGH);
-
+  digitalWrite(D3, LOW);
   ui_init();
   wifi_connect();
   clock_init();
-  cloud_connect();
+  //cloud_connect();
 
 //  MDNS.begin(deviceName.c_str());
 //  MDNS.addService("smartboiler", "tcp", 80);
@@ -21,8 +20,8 @@ void setup() {
 }
 
 void loop() {
-  //server_loop();
+  clock_loop();
   cloud_loop();
-  
-  delay(100);
+  ui_update();
+  delay(10);
 }

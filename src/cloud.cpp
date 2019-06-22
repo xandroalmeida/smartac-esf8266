@@ -1,4 +1,5 @@
 #include "cloud.h"
+#include "ui.h"
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
@@ -18,13 +19,17 @@ void cloud_connect()
 {
     while (!client.connected())
     {
+        ui_data.cloud_status = disconnected;
+        ui_update(true);
         String clientId = "ESP8266Client-" + ESP.getChipId();
         if (client.connect(clientId.c_str(), "zxiuzdba", "j3-jL9GPHUUO")) {
+            ui_data.cloud_status = connected;
+            ui_update(true);
             client.publish("outTopic", "hello world");
             client.subscribe("inTopic");
         } else {
-            Serial.print("failed to MQTT connect , rc=");
-            Serial.print(client.state());
+            ui_data.cloud_status = error;
+            ui_update(true);
             delay(1000);
         }
     }
