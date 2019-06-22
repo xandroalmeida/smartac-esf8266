@@ -5,9 +5,22 @@
 #include "cloud.h"
 #include "ui.h"
 
+
+#include <IRremoteESP8266.h>
+#include <IRsend.h>
+#include <ir_Samsung.h>
+
+const uint16_t kIrLed = D3;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
+IRSamsungAc ac(kIrLed);
+
 void setup() {
-  pinMode(D3, OUTPUT);
-  digitalWrite(D3, LOW);
+  ac.begin();
+  ac.off();
+  ac.setFan(kSamsungAcFanLow);
+  ac.setMode(kSamsungAcCool);
+  ac.setTemp(25);
+  ac.setSwing(false);
+
   ui_init();
   wifi_connect();
   clock_init();
@@ -21,6 +34,9 @@ void setup() {
 void loop() {
   ui_update();
   clock_loop();
-  cloud_loop();
-  delay(10);
+  //cloud_loop();
+  ac.on();
+  ac.setMode(kSamsungAcCool);
+  //ac.sendExtended();
+  delay(10000);
 }
