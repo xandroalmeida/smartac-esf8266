@@ -11,7 +11,6 @@ void setup() {
   ui_init();
   wifi_connect();
   clock_init();
-  //cloud_connect();
 
 //  MDNS.begin(deviceName.c_str());
 //  MDNS.addService("smartboiler", "tcp", 80);
@@ -20,8 +19,8 @@ void setup() {
 }
 
 void loop() {
+  ui_update();
   clock_loop();
   cloud_loop();
-  ui_update();
   delay(10);
 }

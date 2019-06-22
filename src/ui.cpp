@@ -59,6 +59,11 @@ void ui_update(bool force_update)
 
         display.setFont(ArialMT_Plain_16);
         display.drawString(0, 10, line1);
+
+        display.setFont(ArialMT_Plain_10);
+        display.drawString(0, 20, ui_data.line1);
+        display.drawString(0, 30, ui_data.line2);
+
         display.display();
     }
 }

@@ -5,32 +5,38 @@
 
 static void callback(char* topic, byte* payload, unsigned int length) 
 {
+    String line2;
+    for (unsigned int i = 0; i < length; i++) {
+        line2.concat((char)payload[i]);
+    }
+    ui_data.line1 = String(topic);
+    ui_data.line2 = line2;
+
 }
 
 static WiFiClient espClient;
 static PubSubClient client("postman.cloudmqtt.com", 14716, callback, espClient);
 
-void cloud_loop() 
+static void cloud_reconnect()
 {
-    client.loop();
-}
-
-void cloud_connect()
-{
-    while (!client.connected())
+    if (!client.connected())
     {
         ui_data.cloud_status = disconnected;
-        ui_update(true);
         String clientId = "ESP8266Client-" + ESP.getChipId();
         if (client.connect(clientId.c_str(), "zxiuzdba", "j3-jL9GPHUUO")) {
             ui_data.cloud_status = connected;
-            ui_update(true);
             client.publish("outTopic", "hello world");
             client.subscribe("inTopic");
         } else {
             ui_data.cloud_status = error;
-            ui_update(true);
-            delay(1000);
+            delay(100);
         }
     }
 }
+
+void cloud_loop() 
+{
+    cloud_reconnect();
+    client.loop();
+}
+
